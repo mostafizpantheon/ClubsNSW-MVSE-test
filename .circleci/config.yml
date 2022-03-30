@@ -66,10 +66,12 @@ jobs:
           # https://github.com/pantheon-systems/docker-build-tools-ci/blob/6.x/scripts/set-environment
           name: setup-environment-vars
           command: /build-tools-ci/scripts/set-environment
+          no_output_timeout: 30m
 
       - run:
           name: clone-bash-env
           command: cp $BASH_ENV bash_env.txt
+          no_output_timeout: 30m
 
       # https://circleci.com/docs/2.0/workflows/#using-workspaces-to-share-data-among-jobs
       - persist_to_workspace:
@@ -93,10 +95,12 @@ jobs:
           # https://github.com/pantheon-systems/docker-build-tools-ci/blob/6.x/scripts/set-environment
           name: setup-environment-vars
           command: /build-tools-ci/scripts/set-environment
+          no_output_timeout: 30m
 
       - run:
           name: run static tests
           command: ./.ci/test/static/run
+          no_output_timeout: 30m
 
       - save_cache:
           key: composer-cache-{{ checksum "composer.lock" }}
@@ -120,10 +124,12 @@ jobs:
           # https://github.com/pantheon-systems/docker-build-tools-ci/blob/6.x/scripts/set-environment
           name: setup-environment-vars
           command: /build-tools-ci/scripts/set-environment
+          no_output_timeout: 30m
 
       - run:
           name: run PHP build step
           command: ./.ci/build/php
+          no_output_timeout: 30m
 
       - save_cache:
           key: vendor-{{ checksum "composer.lock" }}
@@ -151,6 +157,7 @@ jobs:
           # https://github.com/pantheon-systems/docker-build-tools-ci/blob/6.x/scripts/set-environment
           name: setup-environment-vars
           command: /build-tools-ci/scripts/set-environment
+          no_output_timeout: 30m
 
       # Rsync the build artifact pieces web directory
       - run:
@@ -161,6 +168,7 @@ jobs:
       - run:
           name: deploy to Pantheon
           command: ./.ci/deploy/pantheon/dev-multidev
+          no_output_timeout: 30m
 
   behat_test:
     <<: *defaults
@@ -177,6 +185,7 @@ jobs:
           # https://github.com/pantheon-systems/docker-build-tools-ci/blob/6.x/scripts/set-environment
           name: setup-environment-vars
           command: /build-tools-ci/scripts/set-environment
+          no_output_timeout: 30m
 
       - run:
           # Uncomment line 26 in .ci/test/behat/initialize to create a backup
@@ -184,10 +193,12 @@ jobs:
           # environment to the previous state after Behat tests have run.
           name: prepare for Behat testing
           command: ./.ci/test/behat/initialize
+          no_output_timeout: 30m
 
       - run:
           name: run acceptance tests with Behat
           command: ./.ci/test/behat/run
+          no_output_timeout: 30m
 
       - run:
           # Uncomment line 13 in .ci/test/behat/cleanup to restore a backup
